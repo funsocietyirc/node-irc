@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const irc  = require('./lib/irc.js');
 const util = require('util');
 const color = require('ansi-color').set;
