@@ -150,6 +150,27 @@ Client
         generating the whois information and is passed exactly the same
         information as a `whois` event described above.
 
+.. js:function:: Client.watchRaw(nicks, [mode])
+
+    Adds or removes the specified `nicks` to the watch list. Notifications from the server are available via the `watch`, `watchlist`, `watchonline` and `watchoffline` events.
+
+    :param string nicks: is a nickname or an array of nicknames. Nicknames should contain the `+` (add) or `-` (remove) prefixes
+    :param string mode: is the mode to use for the watch list (`s` or `l`). Defaults to `s`
+
+.. js:function:: Client.watch(nicks, [mode])
+
+    Adds the specified `nicks` to the watch list. Notifications from the server are available via the `watch`, `watchlist`, `watchonline` and `watchoffline` events.
+
+    :param string nicks: is a nickname or an array of nicknames.
+    :param string mode: is the mode to use for the watch list (`s` or `l`). Defaults to `s`
+
+.. js:function:: Client.unwatch(nicks, [mode])
+
+    Removes the specified `nicks` to the watch list.
+
+    :param string nicks: is a nickname or an array of nicknames.
+    :param string mode: is the mode to use for the watch list (`s` or `l`). Defaults to `s`
+
 .. js:function:: Client.list([arg1, arg2, ...])
 
    Request a channel listing from the server. The arguments for this method are
@@ -444,6 +465,64 @@ Events
             serverinfo: "The Dollyfish Underworld",
             operator: "is an IRC Operator"
         }
+
+.. js:data:: 'watch'
+
+    `function (message) { }`
+
+    Emitted whenever the server sees or stops seeing a nickname in the watch list. The
+    information should look something like::
+
+        // when user goes online:
+        {
+            "prefix":"calisto.chathispano.com",
+            "server":"calisto.chathispano.com",
+            "command":"rpl_watchoffline",
+            "rawCommand":"600",
+            "commandType":"reply",
+            "args":[
+                "asdfoiuqwoer__1", // this is our nickname
+                "aaaaa5", // here goes the nickname in our watch list
+                "joqiwjelkj",
+                "D6huCU.AWxGvE.virtual",
+                "1561727250",
+                "logged online"
+            ]
+        }
+        // when user goes offline:
+        {
+            "prefix":"calisto.chathispano.com",
+            "server":"calisto.chathispano.com",
+            "command":"rpl_watchoffline",
+            "rawCommand":"601",
+            "commandType":"reply",
+            "args":[
+                "asdfoiuqwoer__1", // this is our nickname
+                "aaaaa5", // here goes the nickname in our watch list
+                "joqiwjelkj",
+                "D6huCU.AWxGvE.virtual",
+                "1561727250",
+                "logged offline"
+            ]
+        }
+
+.. js:data:: 'watchonline'
+
+    `function (nickname) { }`
+
+    Emitted whenever `nickname` in our watch list goes online
+
+.. js:data:: 'watchoffline'
+
+    `function (nickname) { }`
+
+    Emitted whenever `nickname` in our watch list goes offline
+
+.. js:data:: 'watchlist'
+
+    `function (nicknames) { }`
+
+    Emitted whenever the watch list is updated after calling `watch` or `unwatch` functions. `nicknames` is an array with the nicknames in our watching list
 
 .. js:data:: 'channellist_start'
 
